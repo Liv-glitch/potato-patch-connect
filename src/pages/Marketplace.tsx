@@ -249,7 +249,7 @@ const Marketplace = () => {
 
       {/* Booking Dialog */}
       <Dialog open={!!bookingFarmer} onOpenChange={(o) => !o && setBookingFarmer(null)}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="font-display">Book Farmer {bookingFarmer?.farmer_id}</DialogTitle>
           </DialogHeader>
