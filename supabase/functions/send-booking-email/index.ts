@@ -1,0 +1,44 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const { buyerEmail, buyerName, farmerName, farmerPhone, farmerLocation, potatoVariety, acresBooked } = await req.json();
+
+    // For now, log the email that would be sent
+    // In production, integrate with an email service
+    console.log(`Email would be sent to ${buyerEmail}:`);
+    console.log(`Subject: Farmer Booking Confirmation`);
+    console.log(`
+Hello ${buyerName},
+
+Your booking for a potato farmer has been approved. Below are the farmer details:
+
+Farmer Name: ${farmerName}
+Farmer Phone Number: ${farmerPhone}
+Farmer Location: ${farmerLocation}
+Potato Variety: ${potatoVariety}
+Acres Booked: ${acresBooked}
+
+Please contact the farmer directly to coordinate the next steps.
+    `);
+
+    return new Response(JSON.stringify({ success: true, message: "Email notification logged" }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+});
