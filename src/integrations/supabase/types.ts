@@ -14,16 +14,185 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          acres_booked: number
+          booking_status: Database["public"]["Enums"]["booking_status"]
+          buyer_id: string
+          created_at: string
+          farmer_id: string
+          id: string
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          price_per_acre: number
+          total_amount: number | null
+          updated_at: string
+        }
+        Insert: {
+          acres_booked: number
+          booking_status?: Database["public"]["Enums"]["booking_status"]
+          buyer_id: string
+          created_at?: string
+          farmer_id: string
+          id?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          price_per_acre?: number
+          total_amount?: number | null
+          updated_at?: string
+        }
+        Update: {
+          acres_booked?: number
+          booking_status?: Database["public"]["Enums"]["booking_status"]
+          buyer_id?: string
+          created_at?: string
+          farmer_id?: string
+          id?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          price_per_acre?: number
+          total_amount?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_buyer_id_fkey"
+            columns: ["buyer_id"]
+            isOneToOne: false
+            referencedRelation: "buyers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_farmer_id_fkey"
+            columns: ["farmer_id"]
+            isOneToOne: false
+            referencedRelation: "farmers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      buyers: {
+        Row: {
+          buyer_name: string
+          county: string
+          created_at: string
+          email: string
+          id: string
+          phone_number: string
+        }
+        Insert: {
+          buyer_name: string
+          county: string
+          created_at?: string
+          email: string
+          id?: string
+          phone_number: string
+        }
+        Update: {
+          buyer_name?: string
+          county?: string
+          created_at?: string
+          email?: string
+          id?: string
+          phone_number?: string
+        }
+        Relationships: []
+      }
+      farmers: {
+        Row: {
+          acreage_planted: number
+          county: string
+          created_at: string
+          email: string | null
+          farmer_id: string | null
+          full_name: string
+          id: string
+          listing_status: Database["public"]["Enums"]["listing_status"]
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          phone_number: string
+          planting_date: string
+          potato_variety: string
+          registration_fee: number | null
+          registration_status: Database["public"]["Enums"]["registration_status"]
+          specific_location: string
+          updated_at: string
+          ward: string
+        }
+        Insert: {
+          acreage_planted: number
+          county: string
+          created_at?: string
+          email?: string | null
+          farmer_id?: string | null
+          full_name: string
+          id?: string
+          listing_status?: Database["public"]["Enums"]["listing_status"]
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          phone_number: string
+          planting_date: string
+          potato_variety: string
+          registration_fee?: number | null
+          registration_status?: Database["public"]["Enums"]["registration_status"]
+          specific_location: string
+          updated_at?: string
+          ward: string
+        }
+        Update: {
+          acreage_planted?: number
+          county?: string
+          created_at?: string
+          email?: string | null
+          farmer_id?: string | null
+          full_name?: string
+          id?: string
+          listing_status?: Database["public"]["Enums"]["listing_status"]
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          phone_number?: string
+          planting_date?: string
+          potato_variety?: string
+          registration_fee?: number | null
+          registration_status?: Database["public"]["Enums"]["registration_status"]
+          specific_location?: string
+          updated_at?: string
+          ward?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_short_id: { Args: { prefix?: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      booking_status: "pending_approval" | "approved" | "rejected"
+      listing_status: "available" | "pending_approval" | "booked"
+      payment_status: "pending" | "paid" | "promo_code" | "rejected"
+      registration_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +319,12 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      booking_status: ["pending_approval", "approved", "rejected"],
+      listing_status: ["available", "pending_approval", "booked"],
+      payment_status: ["pending", "paid", "promo_code", "rejected"],
+      registration_status: ["pending", "approved", "rejected"],
+    },
   },
 } as const
