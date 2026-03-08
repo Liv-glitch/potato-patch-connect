@@ -87,19 +87,24 @@ const AdminDashboard = () => {
       }).eq("id", farmerId);
       if (farmerErr) throw farmerErr;
 
-      // Send email notification on approval
+      // Send email notification on approval (non-blocking)
       if (status === "approved" && booking) {
-        await supabase.functions.invoke("send-booking-email", {
-          body: {
-            buyerEmail: booking.buyers?.email,
-            buyerName: booking.buyers?.buyer_name,
-            farmerName: booking.farmers?.full_name,
-            farmerPhone: booking.farmers?.phone_number,
-            farmerLocation: `${booking.farmers?.county}, ${booking.farmers?.ward}, ${booking.farmers?.specific_location}`,
-            potatoVariety: booking.farmers?.potato_variety,
-            acresBooked: booking.acres_booked,
-          },
-        });
+        try {
+          await supabase.functions.invoke("send-booking-email", {
+            body: {
+              buyerEmail: booking.buyers?.email,
+              buyerName: booking.buyers?.buyer_name,
+              farmerName: booking.farmers?.full_name,
+              farmerPhone: booking.farmers?.phone_number,
+              farmerLocation: `${booking.farmers?.county}, ${booking.farmers?.ward}, ${booking.farmers?.specific_location}`,
+              potatoVariety: booking.farmers?.potato_variety,
+              acresBooked: booking.acres_booked,
+            },
+          });
+        } catch (emailErr) {
+          console.error("Email notification failed:", emailErr);
+          toast.error("Booking approved but email notification failed");
+        }
       }
     },
     onSuccess: () => {
@@ -258,7 +263,7 @@ const AdminDashboard = () => {
 
           {/* Bookings Tab */}
           <TabsContent value="bookings">
-            <div className="rounded-lg border">
+            <div className="rounded-lg border overflow-x-auto max-h-[500px] overflow-y-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
