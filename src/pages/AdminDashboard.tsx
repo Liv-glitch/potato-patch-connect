@@ -74,7 +74,7 @@ const AdminDashboard = () => {
   });
 
   const updateBooking = useMutation({
-    mutationFn: async ({ id, farmerId, status }: { id: string; farmerId: string; status: "approved" | "rejected" }) => {
+    mutationFn: async ({ id, farmerId, status, booking }: { id: string; farmerId: string; status: "approved" | "rejected"; booking?: any }) => {
       const { error: bookingErr } = await supabase.from("bookings").update({
         booking_status: status,
         payment_status: status === "approved" ? "paid" : "rejected",
@@ -86,6 +86,21 @@ const AdminDashboard = () => {
         listing_status: status === "approved" ? "booked" : "available",
       }).eq("id", farmerId);
       if (farmerErr) throw farmerErr;
+
+      // Send email notification on approval
+      if (status === "approved" && booking) {
+        await supabase.functions.invoke("send-booking-email", {
+          body: {
+            buyerEmail: booking.buyers?.email,
+            buyerName: booking.buyers?.buyer_name,
+            farmerName: booking.farmers?.full_name,
+            farmerPhone: booking.farmers?.phone_number,
+            farmerLocation: `${booking.farmers?.county}, ${booking.farmers?.ward}, ${booking.farmers?.specific_location}`,
+            potatoVariety: booking.farmers?.potato_variety,
+            acresBooked: booking.acres_booked,
+          },
+        });
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-bookings"] });
