@@ -258,7 +258,7 @@ const AdminDashboard = () => {
 
           {/* Bookings Tab */}
           <TabsContent value="bookings">
-            <div className="rounded-lg border">
+            <div className="rounded-lg border overflow-x-auto max-h-[500px] overflow-y-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
