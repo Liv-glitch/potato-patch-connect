@@ -291,10 +291,10 @@ const AdminDashboard = () => {
                       <TableCell>
                         {b.booking_status === "pending_approval" && (
                           <div className="flex gap-1">
-                            <Button size="sm" className="h-7 text-xs" onClick={() => updateBooking.mutate({ id: b.id, farmerId: b.farmer_id, status: "approved" })}>
+                            <Button size="sm" className="h-7 text-xs" onClick={() => updateBooking.mutate({ id: b.id, farmerId: b.farmer_id, status: "approved", booking: b })}>
                               <CheckCircle className="mr-1 h-3 w-3" /> Approve
                             </Button>
-                            <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => updateBooking.mutate({ id: b.id, farmerId: b.farmer_id, status: "rejected" })}>
+                            <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => updateBooking.mutate({ id: b.id, farmerId: b.farmer_id, status: "rejected", booking: b })}>
                               <XCircle className="mr-1 h-3 w-3" /> Reject
                             </Button>
                           </div>
