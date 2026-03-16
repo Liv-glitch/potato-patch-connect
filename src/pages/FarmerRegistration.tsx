@@ -14,6 +14,7 @@ const FarmerRegistration = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
+  const [starterAccess, setStarterAccess] = useState(false);
   const [form, setForm] = useState({
     full_name: "",
     phone_number: "",
@@ -28,7 +29,7 @@ const FarmerRegistration = () => {
 
   const wards = form.county ? KENYA_COUNTIES[form.county] || [] : [];
   const acreage = parseFloat(form.acreage_planted) || 0;
-  const registrationFee = acreage * 2000;
+  const registrationFee = starterAccess ? 0 : acreage * 2000;
 
   const handleChange = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -42,7 +43,7 @@ const FarmerRegistration = () => {
       return;
     }
 
-    if (showPayment) {
+    if (showPayment || starterAccess) {
       setLoading(true);
       const { error } = await supabase.from("farmers").insert({
         full_name: form.full_name,
@@ -54,6 +55,8 @@ const FarmerRegistration = () => {
         potato_variety: form.potato_variety,
         acreage_planted: acreage,
         planting_date: form.planting_date,
+        payment_status: starterAccess ? 'promo_code' : 'pending',
+        registration_fee: registrationFee,
       });
       setLoading(false);
 
@@ -148,7 +151,20 @@ const FarmerRegistration = () => {
                 </div>
               </div>
 
-              {acreage > 0 && (
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="starterAccess"
+                  checked={starterAccess}
+                  onChange={(e) => setStarterAccess(e.target.checked)}
+                  className="rounded"
+                />
+                <Label htmlFor="starterAccess" className="text-sm">
+                  Starter Access (Free Promo - No Payment Required)
+                </Label>
+              </div>
+
+              {acreage > 0 && !starterAccess && (
                 <div className="rounded-lg border bg-secondary/50 p-4">
                   <p className="text-sm text-muted-foreground">Registration Fee:</p>
                   <p className="font-display text-2xl font-bold text-primary">
@@ -158,7 +174,7 @@ const FarmerRegistration = () => {
                 </div>
               )}
 
-              {showPayment && (
+              {showPayment && !starterAccess && (
                 <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-6 space-y-3">
                   <h3 className="font-display text-lg font-semibold text-foreground">Payment Instructions</h3>
                   <div className="space-y-1 text-sm">
@@ -172,8 +188,17 @@ const FarmerRegistration = () => {
                 </div>
               )}
 
+              {starterAccess && (
+                <div className="rounded-lg border-2 border-green-500/30 bg-green-50 p-6 space-y-3">
+                  <h3 className="font-display text-lg font-semibold text-foreground">Starter Access Promo</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Congratulations! You've selected Starter Access. No payment is required. Your registration will be processed as a promo.
+                  </p>
+                </div>
+              )}
+
               <Button type="submit" className="w-full" size="lg" disabled={loading}>
-                {loading ? "Submitting..." : showPayment ? "Submit Registration" : "Proceed"}
+                {loading ? "Submitting..." : (showPayment || starterAccess) ? "Submit Registration" : "Proceed"}
               </Button>
             </form>
           </CardContent>
