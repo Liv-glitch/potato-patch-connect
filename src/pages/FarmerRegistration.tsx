@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +36,30 @@ const FarmerRegistration = () => {
     if (field === "county") setForm((prev) => ({ ...prev, county: value, ward: "" }));
   };
 
+  // Persist form state so reloads keep the entered data.
+  useEffect(() => {
+    const saved = localStorage.getItem("farmerRegistrationForm");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setForm((prev) => ({ ...prev, ...parsed }));
+        if (parsed.starterAccess) setStarterAccess(true);
+        if (parsed.showPayment) setShowPayment(true);
+      } catch {
+        // ignore invalid JSON
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const payload = {
+      ...form,
+      starterAccess,
+      showPayment,
+    };
+    localStorage.setItem("farmerRegistrationForm", JSON.stringify(payload));
+  }, [form, starterAccess, showPayment]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.full_name || !form.phone_number || !form.county || !form.ward || !form.specific_location || !form.potato_variety || !form.acreage_planted || !form.planting_date) {
@@ -65,6 +89,7 @@ const FarmerRegistration = () => {
         return;
       }
       toast.success("Registration submitted! Your listing is pending approval.");
+      localStorage.removeItem("farmerRegistrationForm");
       navigate("/");
     } else {
       setShowPayment(true);
