@@ -203,7 +203,7 @@ const FarmerRegistration = () => {
                   <h3 className="font-display text-lg font-semibold text-foreground">Payment Instructions</h3>
                   <div className="space-y-1 text-sm">
                     <p><span className="font-medium">Paybill:</span> 542542</p>
-                    <p><span className="font-medium">Account Number:</span> 324567</p>
+                    <p><span className="font-medium">Account Number:</span> 851254</p>
                     <p><span className="font-medium">Amount:</span> Ksh {registrationFee.toLocaleString()}</p>
                   </div>
                   <p className="text-xs text-muted-foreground">

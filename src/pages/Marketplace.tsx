@@ -290,7 +290,7 @@ const Marketplace = () => {
               <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-4 space-y-2">
                 <h4 className="font-semibold text-foreground">Payment Instructions</h4>
                 <p className="text-sm"><span className="font-medium">Paybill:</span> 542542</p>
-                <p className="text-sm"><span className="font-medium">Account Number:</span> 324567</p>
+                <p className="text-sm"><span className="font-medium">Account Number:</span> 851254</p>
                 <p className="text-sm"><span className="font-medium">Amount:</span> Ksh {totalPrice.toLocaleString()}</p>
               </div>
             )}
