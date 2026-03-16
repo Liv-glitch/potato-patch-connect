@@ -173,7 +173,7 @@ const FarmerRegistration = () => {
               )}
 
               <Button type="submit" className="w-full" size="lg" disabled={loading}>
-                {loading ? "Submitting..." : showPayment ? "Submit Registration" : "Proceed to Payment"}
+                {loading ? "Submitting..." : showPayment ? "Submit Registration" : "Proceed"}
               </Button>
             </form>
           </CardContent>
