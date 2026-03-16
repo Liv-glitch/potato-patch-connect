@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Sprout, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -8,8 +8,12 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <Sprout className="h-7 w-7 text-primary" />
+        <Link to="/" className="flex items-center gap-3">
+          <img 
+            src="/logo.svg" 
+            alt="PotatoMarket logo" 
+            className="h-10 w-10 object-contain"
+          />
           <span className="font-display text-xl font-bold text-foreground">PotatoMarket</span>
         </Link>
         <div className="flex items-center gap-3">
