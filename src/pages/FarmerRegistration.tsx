@@ -56,7 +56,6 @@ const FarmerRegistration = () => {
         acreage_planted: acreage,
         planting_date: form.planting_date,
         payment_status: starterAccess ? 'promo_code' : 'pending',
-        registration_fee: registrationFee,
       });
       setLoading(false);
 
