@@ -38,6 +38,7 @@ export const POTATO_VARIETIES = [
   "Sherekea",
   "Wanjiku",
   "Purple Gold",
+  "Challenger",
 ];
 
 // Harvest days by variety (approximate)
@@ -57,4 +58,5 @@ export const HARVEST_DAYS: Record<string, number> = {
   "Sherekea": 105,
   "Wanjiku": 100,
   "Purple Gold": 110,
+  "Challenger": 105,
 };
